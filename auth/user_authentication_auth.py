@@ -38,16 +38,3 @@ def login():
 
     return jsonify({'error': 'Invalid credentials'}), 401
 
-@auth_bp.route('/profile', methods=['GET'])
-@jwt_required()
-def profile():
-    user_id = get_jwt_identity()
-    user = mongo.db.users.find_one({"_id": ObjectId(user_id)})
-
-    if user:
-        return jsonify({
-            'id': str(user['_id']),
-            'name': user['name'],
-            'email': user['email']
-        }), 200
-    return jsonify({'error': 'User not found'}), 404
